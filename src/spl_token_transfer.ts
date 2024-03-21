@@ -37,19 +37,20 @@ const getAddress = () => {
 };
 
 const sendRazeTokens = async () => {
-  const connection = new Connection(clusterApiUrl("mainnet-beta"), {
-    commitment: "confirmed",
-  });
-  const feePayer = Keypair.fromSecretKey(decode(process.env.PRIVATE_KEY || ""));
-  const mintPubkey = new PublicKey(
-    process.env.TOKEN_MINT_PUBLIC_KEY || ""
-  );
-  const walletListArray: any = await getAddress();
-  const toTokenAccountList = [];
-  const PRIORITY_RATE = 1000000; // MICRO_LAMPORTS
-  const PRIORITY_FEE_INSTRUCTIONS = ComputeBudgetProgram.setComputeUnitPrice({
-    microLamports: PRIORITY_RATE,
-  });
+  try {
+    const connection = new Connection(clusterApiUrl("mainnet-beta"), {
+      commitment: "confirmed",
+    });
+    const feePayer = Keypair.fromSecretKey(
+      decode(process.env.PRIVATE_KEY || "")
+    );
+    const mintPubkey = new PublicKey(process.env.TOKEN_MINT_PUBLIC_KEY || "");
+    const walletListArray: any = await getAddress();
+    const toTokenAccountList = [];
+    const PRIORITY_RATE = 1000000; // MICRO_LAMPORTS
+    const PRIORITY_FEE_INSTRUCTIONS = ComputeBudgetProgram.setComputeUnitPrice({
+      microLamports: PRIORITY_RATE,
+    });
     for (let i = 0; i < walletListArray.length; i++) {
       const receiveAddress = new PublicKey(walletListArray[i].walletAddress);
       const toTokenAccount = await getOrCreateAssociatedTokenAccount(
@@ -96,6 +97,9 @@ const sendRazeTokens = async () => {
     await new Promise((resolve) => {
       setTimeout(resolve, 3000);
     });
+  } catch (error: any) {
+    console.log("error------->", error)
+  }
 };
 
 export default sendRazeTokens;
