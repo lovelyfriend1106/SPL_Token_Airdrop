@@ -1,4 +1,4 @@
-# SPL token airdrop Node typescript project
+# SPL token airdrop Node.js Typescript project
 Simple SPL token airdrop using Node.js
 
 [THIS] is spl token airdrop node.js script
